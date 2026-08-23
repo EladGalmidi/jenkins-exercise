@@ -18,7 +18,7 @@ pipeline{
         stage('Deploy') {
             steps {
                 echo '=== deploy stage ===='
-                sh 'mkdir deplpoy'
+                sh 'mkdir deploy'
                 sh 'cp app.txt deploy/'
                 sh 'ls deploy'
             }
