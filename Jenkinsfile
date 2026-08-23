@@ -6,28 +6,27 @@ pipeline{
         stage('Build') {
             steps {
                 echo '=== build stage ===='
+                sh 'echo he need some milk >> app.txt'
             }
         }
         stage('Test') {
             steps {
                 echo '=== test stage ===='
+                sh 'test -f app.txt'
             }
         }
         stage('Deploy') {
             steps {
                 echo '=== deploy stage ===='
+                sh 'mkdir depolo'
+                sh 'cp app.txt deploy/'
+                sh 'ls deploy'
             }
         }
     }
     post {
         always {
-            echo 'This will always run'
-        }
-        success {
-            echo 'This will run only if successful'
-        }
-        failure {
-            echo 'This will run only if failed'
+            cleanWs()
         }
     }
 }
