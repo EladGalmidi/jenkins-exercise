@@ -31,6 +31,8 @@ pipeline {
                     echo "$BUILD_NUMBER" >> $FILE_TO_TEST
                     date >> $FILE_TO_TEST
                 '''
+            sh 'ls'
+            sh 'cat $FILE_TO_TEST'
 
             }
 
