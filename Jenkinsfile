@@ -4,6 +4,7 @@ pipeline{
         APP_NAME = 'wallak applications'
         APP_VERSION = '1.0'
         DOCKER_REPO = 'eladgalmidi/'
+        FILE_TO_TEST = './build-info.txt'
     }
     stages
 {
@@ -11,7 +12,12 @@ pipeline{
             steps {
                 echo '=== build stage ===='
                 sh 'echo he need some milk >> app.txt'
-                sh "echo 'welcome to the pipeline of application ${APP_NAME} we are in version ${APP_VERSION}'"}
+                sh "echo 'welcome to the pipeline of application ${APP_NAME} we are in version ${APP_VERSION}'" }
+                sh '''
+                    echo "application name: $APP_NAME ">> build-info.txt
+                    echo "$BUILD_NUMBER ">> build-info.txt
+                    date >> build-info.txt
+                   '''
         }
         stage('Test') {
             steps {
