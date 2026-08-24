@@ -1,9 +1,7 @@
 pipeline {
-
     agent any
 
     environment {
-
         APP_NAME = 'wallak applications'
 
         APP_VERSION = '1.0'
@@ -11,15 +9,11 @@ pipeline {
         DOCKER_REPO = 'eladgalmidi/'
 
         FILE_TO_TEST = './build-info.txt'
-
     }
 
     stages {
-
         stage('Build') {
-
             steps {
-
                 echo '=== build stage ===='
 
                 sh 'echo he need some milk >> app.txt'
@@ -33,27 +27,32 @@ pipeline {
                 '''
             sh 'ls'
             sh 'cat $FILE_TO_TEST'
-
             }
-
         }
 
         stage('Test') {
-
             steps {
-
                 echo '=== test stage ===='
 
                 sh 'test -f app.txt'
 
                 echo "for any details please visit: ${JOB_URL}. for build #${BUILD_NUMBER}"
-
             }
-
+            parallel{
+                stage("file test"){
+                    steps{
+                        sh 'test -f app.txt'
+                    }
+                }
+                stage("build into test"){
+                    steps{
+                        sh 'python3 test.py wallak'
+                    }
+                }
+            }
         }
 
         stage('Deploy') {
-
             steps {
 
                 echo '=== deploy stage ===='
