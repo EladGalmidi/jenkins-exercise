@@ -41,8 +41,15 @@ pipeline {
             parallel{
                 stage("file test"){
                     steps{
-                        sh 'test -f app.txt'
-                    }
+                        sh '''
+                            if [ -f app.txt ] then;
+                                echo app exists
+                            else
+                                echo ERROR: app.txt does not exist
+                                exit 1
+                            fi
+                        '''
+                        }
                 }
                 stage("build into test"){
                     steps{
