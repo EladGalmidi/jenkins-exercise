@@ -12,6 +12,7 @@ pipeline {
     }
 
     stages {
+
         stage('Build') {
             steps {
                 echo '=== build stage ===='
@@ -25,37 +26,35 @@ pipeline {
                     echo "$BUILD_NUMBER" >> $FILE_TO_TEST
                     date >> $FILE_TO_TEST
                 '''
-            sh 'ls'
-            sh 'cat $FILE_TO_TEST'
+
+                sh 'ls'
+
+                sh 'cat $FILE_TO_TEST'
             }
         }
 
         stage('Test') {
-            steps {
-                echo '=== test stage ===='
+            parallel {
 
-                sh 'test -f app.txt'
-
-                echo "for any details please visit: ${JOB_URL}. for build #${BUILD_NUMBER}"
-            }
-            parallel{
-                stage("file test"){
-                    steps{
+                stage('file test') {
+                    steps {
                         sh '''
-                            if [ -f app.txt ] then;
-                                echo app exists
+                            if [ -f app.txt ]; then
+                                echo "app exists"
                             else
-                                echo ERROR: app.txt does not exist
+                                echo "ERROR: app.txt does not exist"
                                 exit 1
                             fi
                         '''
-                        }
+                    }
                 }
-                stage("build into test"){
-                    steps{
+
+                stage('build into test') {
+                    steps {
                         sh 'python3 test.py wallak'
                     }
                 }
+
             }
         }
 
@@ -69,21 +68,13 @@ pipeline {
                 sh 'cp app.txt deploy/'
 
                 sh 'ls deploy'
-
             }
-
         }
-
     }
 
     post {
-
         always {
-
             cleanWs()
-
         }
-
     }
-
 }
