@@ -14,9 +14,9 @@ pipeline{
                 sh 'echo he need some milk >> app.txt'
                 sh "echo 'welcome to the pipeline of application ${APP_NAME} we are in version ${APP_VERSION}'" }
                 sh '''
-                    echo "application name: $APP_NAME ">> build-info.txt
-                    echo "$BUILD_NUMBER ">> build-info.txt
-                    date >> build-info.txt
+                    echo "application name: $APP_NAME ">> $FILE_TO_TEST
+                    echo "$BUILD_NUMBER ">> $FILE_TO_TEST
+                    date >> $FILE_TO_TEST
                    '''
         }
         stage('Test') {
@@ -28,7 +28,7 @@ pipeline{
         }
         stage('Deploy') {
             steps {
-                echo '=== deploy stage ===='            
+                echo '=== deploy stage ===='
                 sh 'mkdir deploy'
                 sh 'cp app.txt deploy/'
                 sh 'ls deploy'
